@@ -2,6 +2,8 @@ package sorting.divideAndConquer;
 
 import sorting.AbstractSorting;
 
+import java.util.Arrays;
+
 /**
  * Merge sort is based on the divide-and-conquer paradigm. The algorithm
  * consists of recursively dividing the unsorted list in the middle, sorting
@@ -10,40 +12,55 @@ import sorting.AbstractSorting;
  */
 public class MergeSort<T extends Comparable<T>> extends AbstractSorting<T> {
 
-	@Override
-	public void sort(T[] array, int leftIndex, int rightIndex) {
-		int middle = (leftIndex + rightIndex) / 2;
-		int cont = leftIndex;
+    public void mergeSort(T[] array, int leftIndex, int middle, int rightIndex) {
+//		int cont = leftIndex;
 
-		//Ajustar para receber tipos genéricos
-		T[] aux = (T[]) new Comparable[array.length];
-		for (int i = leftIndex; i <= rightIndex; i++) {
-			//Retirar cast
-			aux[i] = array[i];
-		}
+        T[] aux = Arrays.copyOf(array, array.length);
 
-		for (int i = leftIndex; i <= middle; i++) {
-			for (int j = middle + 1; j <= rightIndex; j++) {
-				if (aux[j].compareTo(aux[i]) > 0) {
-					array[cont] = aux[i];
-				} else if (aux[i].compareTo(aux[j]) > 0) {
-					array[cont] = aux[j];
-				}
-				cont++;
+        int i = leftIndex;
+        int j = middle + 1;
+        int k = leftIndex;
 
-				if (i == middle) {
-					array[cont] = aux[i];
-					cont++;
-				}
+        while (i <= middle && j <= rightIndex) {
 
-				if (j == middle) {
-					array[cont] = aux[j];
-					cont++;
-				}
+            if (aux[j].compareTo(aux[i]) > 0) {
+                array[k] = aux[i];
+                i++;
+            } else {
+                array[k] = aux[j];
+                j++;
+            }
+            k++;
 
-			}
-		}
+        }
+
+        // se a metade inicial não foi toda consumida, faz o append.
+        while (i <= middle) {
+            array[k] = aux[i];
+            i++;
+            k++;
+        }
+
+        // se a metade final não foi toda consumida, faz o append.
+        while (j <= rightIndex) {
+            array[k] = aux[j];
+            j++;
+            k++;
+        }
+    }
 
 
-	}
+    @Override
+    public void sort(T[] array, int leftIndex, int rightIndex) {
+
+        if (leftIndex < rightIndex) {
+
+            int middle = (leftIndex + rightIndex) / 2;
+            sort(array, leftIndex, middle);
+            sort(array, middle + 1, rightIndex);
+
+            mergeSort(array, leftIndex, middle, rightIndex);
+        }
+
+    }
 }
