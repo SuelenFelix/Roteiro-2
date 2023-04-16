@@ -1,6 +1,9 @@
 package sorting.divideAndConquer.quicksort3;
 
 import sorting.AbstractSorting;
+import util.Util;
+
+import java.util.Arrays;
 
 /**
  * A classe QuickSortMedianOfThree representa uma variação do QuickSort que
@@ -17,10 +20,50 @@ import sorting.AbstractSorting;
  * 6. Aplicar o algoritmo na particao a esquerda e na particao a direita do pivô.
  */
 public class QuickSortMedianOfThree<T extends Comparable<T>> extends
-		AbstractSorting<T> {
+        AbstractSorting<T> {
 
-	public void sort(T[] array, int leftIndex, int rightIndex) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
-	}
+    public void sort(T[] array, int leftIndex, int rightIndex) {
+        if (leftIndex < rightIndex && array != null) {
+            int index_pivot = partition(array, leftIndex, rightIndex);
+            sort(array, leftIndex, index_pivot - 1);
+            sort(array, index_pivot + 1, rightIndex);
+        }
+    }
+
+    private int partition(T[] array, int leftIndex, int rightIndex) {
+        int medianPivotIndex = this.pickPivotIndex(array, leftIndex, rightIndex);
+        Util.swap(array, leftIndex, medianPivotIndex);
+        T pivot = array[leftIndex];
+        int i = leftIndex;
+
+        for (int j = leftIndex + 1; j <= rightIndex; j++) {
+            if (array[j].compareTo(pivot) <= 0) {
+                i += 1;
+                Util.swap(array, i, j);
+            }
+        }
+
+        Util.swap(array, leftIndex, i);
+        return i;
+
+    }
+
+    private int pickPivotIndex(T[] array, int leftIndex, int rightIndex) {
+        int middleIndex = (leftIndex + rightIndex) / 2;
+        T[] sorted = Arrays.copyOf(array, 3);
+        sorted[0] = array[leftIndex];
+        sorted[1] = array[middleIndex];
+        sorted[2] = array[rightIndex];
+        Arrays.sort(sorted);
+
+        if (sorted[1].compareTo(array[leftIndex]) == 0) {
+            return leftIndex;
+        }
+
+        if (sorted[1].compareTo(array[middleIndex]) == 0) {
+            return middleIndex;
+        }
+        return rightIndex;
+
+    }
 }
