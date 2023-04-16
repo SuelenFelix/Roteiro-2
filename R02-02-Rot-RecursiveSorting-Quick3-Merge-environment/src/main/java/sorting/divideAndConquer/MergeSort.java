@@ -12,44 +12,6 @@ import java.util.Arrays;
  */
 public class MergeSort<T extends Comparable<T>> extends AbstractSorting<T> {
 
-    public void mergeSort(T[] array, int leftIndex, int middle, int rightIndex) {
-//		int cont = leftIndex;
-
-        T[] aux = Arrays.copyOf(array, array.length);
-
-        int i = leftIndex;
-        int j = middle + 1;
-        int k = leftIndex;
-
-        while (i <= middle && j <= rightIndex) {
-
-            if (aux[j].compareTo(aux[i]) > 0) {
-                array[k] = aux[i];
-                i++;
-            } else {
-                array[k] = aux[j];
-                j++;
-            }
-            k++;
-
-        }
-
-        // se a metade inicial não foi toda consumida, faz o append.
-        while (i <= middle) {
-            array[k] = aux[i];
-            i++;
-            k++;
-        }
-
-        // se a metade final não foi toda consumida, faz o append.
-        while (j <= rightIndex) {
-            array[k] = aux[j];
-            j++;
-            k++;
-        }
-    }
-
-
     @Override
     public void sort(T[] array, int leftIndex, int rightIndex) {
 
@@ -62,5 +24,38 @@ public class MergeSort<T extends Comparable<T>> extends AbstractSorting<T> {
             mergeSort(array, leftIndex, middle, rightIndex);
         }
 
+    }
+
+    public void mergeSort(T[] array, int leftIndex, int middle, int rightIndex) {
+        T[] aux = Arrays.copyOf(array, array.length);
+
+        int i = leftIndex;
+        int j = middle + 1;
+        int cont = leftIndex;
+
+        while (i <= middle && j <= rightIndex) {
+
+            if (aux[j].compareTo(aux[i]) > 0) {
+                array[cont] = aux[i];
+                i++;
+            } else {
+                array[cont] = aux[j];
+                j++;
+            }
+            cont++;
+
+        }
+
+        while (i <= middle) {
+            array[cont] = aux[i];
+            i++;
+            cont++;
+        }
+
+        while (j <= rightIndex) {
+            array[cont] = aux[j];
+            j++;
+            cont++;
+        }
     }
 }
